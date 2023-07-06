@@ -85,6 +85,17 @@ jobs:
       - name: Verify sparse checkout
         run: __test__/verify-sparse-checkout.sh
 
+      # Treeless
+      - name: Checkout Treeless
+        uses: ./
+        with:
+          ref: test-data/v2/basic
+          path: treeless
+          treeless: true
+      - name: Verify treeless
+        shell: bash
+        run: __test__/verify-treeless.sh
+
       # Sparse checkout (non-cone mode)
       - name: Sparse checkout (non-cone mode)
         uses: ./

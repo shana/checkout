@@ -153,8 +153,13 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
 
     // Fetch
     core.startGroup('Fetching the repository')
-    const fetchOptions: {filter?: string; fetchDepth?: number} = {}
+    const fetchOptions: {
+      filter?: string
+      fetchDepth?: number
+      treeless?: boolean
+    } = {}
     if (settings.sparseCheckout) fetchOptions.filter = 'blob:none'
+    fetchOptions.treeless = settings.treeless
     if (settings.fetchDepth <= 0) {
       // Fetch all branches and tags
       let refSpec = refHelper.getRefSpecForAllHistory(

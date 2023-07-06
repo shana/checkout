@@ -650,6 +650,9 @@ class GitCommandManager {
             else if (fshelper.fileExistsSync(path.join(this.workingDirectory, '.git', 'shallow'))) {
                 args.push('--unshallow');
             }
+            if (options.treeless) {
+                args.push(`--filter=tree:0`);
+            }
             args.push('origin');
             for (const arg of refSpec) {
                 args.push(arg);
@@ -1243,6 +1246,7 @@ function getSource(settings) {
             const fetchOptions = {};
             if (settings.sparseCheckout)
                 fetchOptions.filter = 'blob:none';
+            fetchOptions.treeless = settings.treeless;
             if (settings.fetchDepth <= 0) {
                 // Fetch all branches and tags
                 let refSpec = refHelper.getRefSpecForAllHistory(settings.ref, settings.commit);
@@ -1768,6 +1772,9 @@ function getInputs() {
         // Determine the GitHub URL that the repository is being hosted from
         result.githubServerUrl = core.getInput('github-server-url');
         core.debug(`GitHub Host URL = ${result.githubServerUrl}`);
+        // Set safe.directory in git global config.
+        result.treeless =
+            (core.getInput('treeless') || 'false').toUpperCase() === 'TRUE';
         return result;
     });
 }

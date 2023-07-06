@@ -240,7 +240,7 @@ class GitCommandManager {
 
   async fetch(
     refSpec: string[],
-    options: {filter?: string; fetchDepth?: number}
+    options: {filter?: string; fetchDepth?: number; treeless?: boolean}
   ): Promise<void> {
     const args = ['-c', 'protocol.version=2', 'fetch']
     if (!refSpec.some(x => x === refHelper.tagsRefSpec)) {
@@ -261,6 +261,10 @@ class GitCommandManager {
       )
     ) {
       args.push('--unshallow')
+    }
+
+    if (options.treeless) {
+      args.push(`--filter=tree:0`)
     }
 
     args.push('origin')

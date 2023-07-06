@@ -141,5 +141,9 @@ export async function getInputs(): Promise<IGitSourceSettings> {
   result.githubServerUrl = core.getInput('github-server-url')
   core.debug(`GitHub Host URL = ${result.githubServerUrl}`)
 
+  // Set safe.directory in git global config.
+  result.treeless =
+    (core.getInput('treeless') || 'false').toUpperCase() === 'TRUE'
+
   return result
 }
